@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -96,7 +96,14 @@ function getActionIconName(action: ActivityAction): string {
     staff_role_changed: "Shield",
     staff_deactivated: "UserX",
     invoice_generated: "FileText",
+    invoice_created: "FileText",
+    invoice_updated: "Edit",
+    invoice_deleted: "Trash2",
     payment_received: "DollarSign",
+    payment_recorded: "DollarSign",
+    repair_started: "Wrench",
+    repair_completed: "CheckCircle",
+    repair_updated: "Edit",
     login_success: "LogIn",
     login_failed: "AlertCircle",
     bulk_operation: "Layers",
@@ -116,18 +123,18 @@ export function ActivityFeed({
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<string>("all");
 
-  useEffect(() => {
-    loadActivities();
-  }, [limit, entityType, entityId]);
-
-  const loadActivities = async () => {
+  const loadActivities = useCallback(async () => {
     setIsLoading(true);
     const result = await getRecentActivity(limit);
     if (result.success && result.data) {
       setActivities(result.data);
     }
     setIsLoading(false);
-  };
+  }, [limit]);
+
+  useEffect(() => {
+    loadActivities();
+  }, [loadActivities]);
 
   const filteredActivities = filter === "all"
     ? activities
@@ -254,11 +261,7 @@ export function ActivityTimeline({ entityType, entityId }: { entityType: string;
   const [activities, setActivities] = useState<ActivityLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    loadActivities();
-  }, [entityType, entityId]);
-
-  const loadActivities = async () => {
+  const loadActivities = useCallback(async () => {
     setIsLoading(true);
     // Import dynamically to avoid circular dependency
     const { getEntityActivity } = await import("@/app/actions/activity");
@@ -267,7 +270,11 @@ export function ActivityTimeline({ entityType, entityId }: { entityType: string;
       setActivities(result.data);
     }
     setIsLoading(false);
-  };
+  }, [entityType, entityId]);
+
+  useEffect(() => {
+    loadActivities();
+  }, [loadActivities]);
 
   const formatTime = (dateStr: string) => {
     try {

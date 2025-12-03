@@ -49,9 +49,9 @@ export const LEAD_STATUSES = [
 
 export const USER_ROLES = [
   "super_admin",
-  "manager",
-  "telecaller",
-  "pickup_agent"
+  "operation_manager",
+  "sell_executive",
+  "technician"
 ] as const;
 
 export const LEAD_SOURCES = [

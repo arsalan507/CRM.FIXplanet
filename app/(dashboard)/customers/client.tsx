@@ -237,7 +237,7 @@ export function CustomersPageClient({
     return selectedCustomer.callNotes;
   };
 
-  const canManage = ["super_admin", "manager"].includes(currentUserRole);
+  const canManage = ["super_admin", "operation_manager"].includes(currentUserRole);
 
   return (
     <div className="space-y-6">

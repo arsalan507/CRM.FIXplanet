@@ -22,7 +22,7 @@ export default async function InvoiceDetailPage({
 
   const { data: staff } = await supabase
     .from("staff")
-    .select("id, role, full_name")
+    .select("*")
     .eq("auth_user_id", user?.id)
     .single();
 

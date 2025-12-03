@@ -259,7 +259,7 @@ export function OpportunitiesPageClient({
     return "Previous Period";
   };
 
-  const canManage = ["super_admin", "manager", "telecaller"].includes(currentUserRole);
+  const canManage = ["super_admin", "operation_manager", "sell_executive"].includes(currentUserRole);
 
   return (
     <div className="space-y-6">

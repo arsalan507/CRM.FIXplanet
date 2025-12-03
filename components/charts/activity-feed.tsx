@@ -64,7 +64,7 @@ export function ActivityFeed({
           const newLead = payload.new as any;
 
           // Check if this lead is relevant to the current user
-          if (role === "telecaller" && staffId && newLead.assigned_to !== staffId) {
+          if (role === "sell_executive" && staffId && newLead.assigned_to !== staffId) {
             return;
           }
 
@@ -96,7 +96,7 @@ export function ActivityFeed({
           const oldLead = payload.old as any;
 
           // Check if this lead is relevant to the current user
-          if (role === "telecaller" && staffId && updatedLead.assigned_to !== staffId) {
+          if (role === "sell_executive" && staffId && updatedLead.assigned_to !== staffId) {
             return;
           }
 

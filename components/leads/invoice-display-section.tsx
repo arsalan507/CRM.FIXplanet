@@ -152,7 +152,7 @@ export function InvoiceDisplaySection({ invoice }: InvoiceDisplaySectionProps) {
               <CheckCircle2 className="h-4 w-4 mt-0.5 flex-shrink-0" />
               <span>
                 <strong>Success!</strong> This lead has been marked as DELIVERED, an
-                opportunity has been created, and the customer's lifetime value has
+                opportunity has been created, and the customer&apos;s lifetime value has
                 been updated.
               </span>
             </p>

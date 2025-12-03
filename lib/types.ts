@@ -1,10 +1,10 @@
 export type UserRole = "super_admin" | "admin" | "technician" | "sell_executive" | "operation_manager";
-export type LeadStatus = "new" | "contacted" | "interested" | "quoted" | "won" | "lost";
+export type LeadStatus = "new" | "contacted" | "interested" | "quoted" | "won" | "lost" | "in_repair" | "completed" | "delivered";
 export type LeadWorkflowStatus = "new" | "Order" | "Not Interested" | "Follow Up";
 export type DeviceType = "iPhone" | "Apple Watch" | "MacBook" | "iPad";
 export type OpportunityStage = "new" | "qualified" | "pickup" | "in_repair" | "closed_won" | "closed_lost";
 
-export interface StaffPermissions {
+export interface StaffPermissions extends Record<string, boolean | undefined> {
   search?: boolean;
   follow_up?: boolean;
   decline?: boolean;
@@ -162,7 +162,7 @@ export interface LeadsByDevice {
 // Phase 5 SIMPLIFIED: Invoice Types
 
 export type PaymentMethod = "cash" | "upi" | "card" | "bank_transfer";
-export type PaymentStatus = "pending" | "paid";
+export type PaymentStatus = "pending" | "paid" | "partial";
 
 export interface SimplifiedInvoice {
   id: string;
@@ -258,6 +258,18 @@ export interface Invoice {
   customer_phone: string;
   customer_email: string | null;
   customer_address: string | null;
+  // For SimplifiedInvoice compatibility
+  device_type?: string;
+  device_model?: string;
+  issue?: string;
+  parts_cost?: number;
+  labor_cost?: number;
+  other_charges?: number;
+  gst_included?: boolean;
+  gst_amount?: number;
+  payment_method?: PaymentMethod | null;
+  paid_at?: string | null;
+  // Regular Invoice fields
   items: InvoiceLineItem[];
   subtotal: number;
   tax_rate: number;

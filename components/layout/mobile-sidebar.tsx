@@ -39,10 +39,10 @@ export function MobileSidebar({ staff, open, onClose }: MobileSidebarProps) {
   const { newLeadsCount } = useNotifications();
 
   const filteredNav = navigation.filter((item) => {
-    if (staff.role === "telecaller") {
+    if (staff.role === "sell_executive") {
       return ["Dashboard", "Leads"].includes(item.name);
     }
-    if (staff.role === "pickup_agent") {
+    if (staff.role === "technician") {
       return ["Dashboard", "Leads", "Customers", "Invoices"].includes(item.name);
     }
     return true;

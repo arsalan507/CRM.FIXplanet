@@ -184,7 +184,7 @@ export function StaffPageClient({ staff: initialStaff, currentUserRole }: StaffP
       phone: member.phone || "",
       employee_id: member.employee_id || "",
       password: "",
-      permissions: member.permissions || {},
+      permissions: (member.permissions || {}) as Record<string, boolean>,
     });
     setEditingStaff(member);
   };

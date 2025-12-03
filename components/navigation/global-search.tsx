@@ -146,7 +146,7 @@ export function GlobalSearch() {
             ) : results.total === 0 && !isSearching ? (
               <div className="text-center py-12 text-gray-400">
                 <Search className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                <p className="text-sm">No results found for "{query}"</p>
+                <p className="text-sm">No results found for &quot;{query}&quot;</p>
                 <p className="text-xs mt-1">Try searching by name, phone, or device model</p>
               </div>
             ) : (

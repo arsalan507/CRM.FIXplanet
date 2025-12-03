@@ -308,14 +308,13 @@ export function InvoiceDetailClient({
                   <p className="text-sm text-gray-600">Simplified invoice schema</p>
                 </div>
                 <div>
-                    <p className="text-sm font-semibold text-gray-700 mb-1">
-                      Terms & Conditions:
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      {invoice.terms_conditions}
-                    </p>
-                  </div>
-                )}
+                  <p className="text-sm font-semibold text-gray-700 mb-1">
+                    Terms &amp; Conditions:
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    {invoice.terms_conditions}
+                  </p>
+                </div>
               </div>
             )}
           </div>

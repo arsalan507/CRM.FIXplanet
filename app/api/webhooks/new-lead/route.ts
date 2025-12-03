@@ -28,7 +28,7 @@ async function getNextAvailableTelecaller(supabase: ReturnType<typeof createAdmi
   const { data: telecallers } = await supabase
     .from("staff")
     .select("id, full_name")
-    .eq("role", "telecaller")
+    .eq("role", "sell_executive")
     .eq("is_active", true);
 
   if (!telecallers || telecallers.length === 0) {
@@ -36,7 +36,7 @@ async function getNextAvailableTelecaller(supabase: ReturnType<typeof createAdmi
     const { data: managers } = await supabase
       .from("staff")
       .select("id")
-      .eq("role", "manager")
+      .eq("role", "operation_manager")
       .eq("is_active", true)
       .limit(1);
 

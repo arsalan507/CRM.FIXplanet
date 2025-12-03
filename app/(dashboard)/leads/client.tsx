@@ -41,7 +41,7 @@ export function LeadsPageClient({
     setSelectedLead(null);
   };
 
-  const canCreate = ["super_admin", "manager", "telecaller"].includes(currentUserRole);
+  const canCreate = ["super_admin", "operation_manager", "sell_executive"].includes(currentUserRole);
 
   return (
     <div className="space-y-6">
@@ -49,7 +49,7 @@ export function LeadsPageClient({
         <div>
           <h1 className="text-2xl font-bold text-black">Leads</h1>
           <p className="text-sm text-gray-500">
-            {currentUserRole === "telecaller"
+            {currentUserRole === "sell_executive"
               ? "Manage your assigned leads"
               : "Manage and track all incoming repair requests"}
           </p>

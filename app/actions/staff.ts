@@ -260,7 +260,7 @@ export async function getTeamPerformance(period: "today" | "week" | "month" | "a
   const { data: staff } = await supabase
     .from("staff")
     .select("id, full_name, role")
-    .in("role", ["telecaller", "manager"])
+    .in("role", ["sell_executive", "operation_manager"])
     .eq("is_active", true);
 
   const leaderboard = await Promise.all(

@@ -159,7 +159,7 @@ export function EnhancedLeadsTable({
   };
 
   const canDelete = currentUserRole === "super_admin";
-  const canEdit = ["super_admin", "manager"].includes(currentUserRole);
+  const canEdit = ["super_admin", "operation_manager"].includes(currentUserRole);
 
   return (
     <div className="space-y-4">

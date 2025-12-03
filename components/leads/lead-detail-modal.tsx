@@ -191,7 +191,7 @@ export function LeadDetailModal({
     );
   };
 
-  const canEdit = ["super_admin", "manager"].includes(currentUserRole);
+  const canEdit = ["super_admin", "operation_manager"].includes(currentUserRole);
   const deviceModels = DEVICE_MODELS[formData.device_type as keyof typeof DEVICE_MODELS] || [];
   const deviceIssues = DEVICE_ISSUES[formData.device_type as keyof typeof DEVICE_ISSUES] || [];
 

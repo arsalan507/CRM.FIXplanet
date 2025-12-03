@@ -7,12 +7,14 @@ export type ActivityAction =
   | "opportunity_created" | "opportunity_moved" | "opportunity_won" | "opportunity_lost"
   | "call_made" | "note_added"
   | "staff_added" | "staff_updated" | "staff_role_changed" | "staff_deactivated"
-  | "invoice_generated" | "payment_received"
+  | "invoice_generated" | "invoice_created" | "invoice_updated" | "invoice_deleted"
+  | "payment_received" | "payment_recorded"
+  | "repair_started" | "repair_completed" | "repair_updated"
   | "login_success" | "login_failed"
   | "bulk_operation";
 
 export type ActivityEntity =
-  | "lead" | "customer" | "opportunity" | "staff" | "invoice" | "call_note" | "system";
+  | "lead" | "customer" | "opportunity" | "staff" | "invoice" | "call_note" | "payment" | "repair" | "system";
 
 export interface LogActivityParams {
   action_type: ActivityAction;
@@ -103,7 +105,14 @@ export function formatActionType(action: ActivityAction): string {
     staff_role_changed: "changed staff role",
     staff_deactivated: "deactivated staff member",
     invoice_generated: "generated an invoice",
+    invoice_created: "created an invoice",
+    invoice_updated: "updated an invoice",
+    invoice_deleted: "deleted an invoice",
     payment_received: "received a payment",
+    payment_recorded: "recorded a payment",
+    repair_started: "started a repair",
+    repair_completed: "completed a repair",
+    repair_updated: "updated a repair",
     login_success: "logged in",
     login_failed: "failed login attempt",
     bulk_operation: "performed bulk operation",
@@ -135,7 +144,14 @@ export function getActionIcon(action: ActivityAction): string {
     staff_role_changed: "Shield",
     staff_deactivated: "UserX",
     invoice_generated: "FileText",
+    invoice_created: "FileText",
+    invoice_updated: "Edit",
+    invoice_deleted: "Trash2",
     payment_received: "DollarSign",
+    payment_recorded: "DollarSign",
+    repair_started: "Wrench",
+    repair_completed: "CheckCircle",
+    repair_updated: "Edit",
     login_success: "LogIn",
     login_failed: "AlertCircle",
     bulk_operation: "Layers",

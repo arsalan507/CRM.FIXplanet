@@ -65,7 +65,7 @@ export default async function DashboardPage() {
     getLeadsOverTime(supabase, staffId, role),
     getDeviceDistribution(supabase, staffId, role),
     getIssueBreakdown(supabase, staffId, role),
-    role === "super_admin" || role === "manager"
+    role === "super_admin" || role === "operation_manager"
       ? getTeamPerformance(supabase)
       : Promise.resolve([]),
     getRecentActivity(supabase, staffId, role),
@@ -76,7 +76,7 @@ export default async function DashboardPage() {
     getRevenueMetrics(30),
   ]);
 
-  const showTeamPerformance = role === "super_admin" || role === "manager";
+  const showTeamPerformance = role === "super_admin" || role === "operation_manager";
 
   return (
     <div className="space-y-6">
@@ -85,7 +85,7 @@ export default async function DashboardPage() {
         <div>
           <h1 className="text-2xl font-bold text-black">Dashboard</h1>
           <p className="text-sm text-gray-500">
-            {role === "telecaller"
+            {role === "sell_executive"
               ? "Your personal performance overview"
               : "Overview of your repair business"}
           </p>

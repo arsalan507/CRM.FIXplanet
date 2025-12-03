@@ -52,7 +52,7 @@ export async function getDashboardMetrics(
 
   // Build base query filter based on role
   let baseFilter = supabase.from("leads").select("*", { count: "exact" });
-  if (role === "telecaller" && staffId) {
+  if (role === "sell_executive" && staffId) {
     baseFilter = baseFilter.eq("assigned_to", staffId);
   }
 
@@ -64,7 +64,7 @@ export async function getDashboardMetrics(
     .from("leads")
     .select("*", { count: "exact" })
     .gte("created_at", sevenDaysAgo.toISOString());
-  if (role === "telecaller" && staffId) {
+  if (role === "sell_executive" && staffId) {
     last7DaysQuery = last7DaysQuery.eq("assigned_to", staffId);
   }
   const { count: last7Days } = await last7DaysQuery;
@@ -75,7 +75,7 @@ export async function getDashboardMetrics(
     .select("*", { count: "exact" })
     .gte("created_at", fourteenDaysAgo.toISOString())
     .lt("created_at", sevenDaysAgo.toISOString());
-  if (role === "telecaller" && staffId) {
+  if (role === "sell_executive" && staffId) {
     prev7DaysQuery = prev7DaysQuery.eq("assigned_to", staffId);
   }
   const { count: prev7Days } = await prev7DaysQuery;
@@ -91,7 +91,7 @@ export async function getDashboardMetrics(
     .from("leads")
     .select("*", { count: "exact" })
     .in("status", ["completed", "delivered"]);
-  if (role === "telecaller" && staffId) {
+  if (role === "sell_executive" && staffId) {
     convertedQuery = convertedQuery.eq("assigned_to", staffId);
   }
   const { count: convertedLeads } = await convertedQuery;
@@ -107,7 +107,7 @@ export async function getDashboardMetrics(
     .select("*", { count: "exact" })
     .in("status", ["completed", "delivered"])
     .lt("created_at", sevenDaysAgo.toISOString());
-  if (role === "telecaller" && staffId) {
+  if (role === "sell_executive" && staffId) {
     prevConvertedQuery = prevConvertedQuery.eq("assigned_to", staffId);
   }
   const { count: prevConverted } = await prevConvertedQuery;
@@ -116,7 +116,7 @@ export async function getDashboardMetrics(
     .from("leads")
     .select("*", { count: "exact" })
     .lt("created_at", sevenDaysAgo.toISOString());
-  if (role === "telecaller" && staffId) {
+  if (role === "sell_executive" && staffId) {
     prevTotalQuery = prevTotalQuery.eq("assigned_to", staffId);
   }
   const { count: prevTotal } = await prevTotalQuery;
@@ -132,7 +132,7 @@ export async function getDashboardMetrics(
     .from("leads")
     .select("*", { count: "exact" })
     .eq("status", "in_repair");
-  if (role === "telecaller" && staffId) {
+  if (role === "sell_executive" && staffId) {
     activeQuery = activeQuery.eq("assigned_to", staffId);
   }
   const { count: activeRepairs } = await activeQuery;
@@ -143,7 +143,7 @@ export async function getDashboardMetrics(
     .select("*", { count: "exact" })
     .eq("status", "in_repair")
     .lt("updated_at", sevenDaysAgo.toISOString());
-  if (role === "telecaller" && staffId) {
+  if (role === "sell_executive" && staffId) {
     prevActiveQuery = prevActiveQuery.eq("assigned_to", staffId);
   }
   const { count: prevActive } = await prevActiveQuery;
@@ -158,7 +158,7 @@ export async function getDashboardMetrics(
     .from("leads")
     .select("*", { count: "exact" })
     .gte("created_at", today.toISOString());
-  if (role === "telecaller" && staffId) {
+  if (role === "sell_executive" && staffId) {
     todayQuery = todayQuery.eq("assigned_to", staffId);
   }
   const { count: newLeadsToday } = await todayQuery;
@@ -170,7 +170,7 @@ export async function getDashboardMetrics(
     .select("*", { count: "exact" })
     .gte("created_at", yesterday.toISOString())
     .lt("created_at", today.toISOString());
-  if (role === "telecaller" && staffId) {
+  if (role === "sell_executive" && staffId) {
     yesterdayQuery = yesterdayQuery.eq("assigned_to", staffId);
   }
   const { count: yesterdayLeads } = await yesterdayQuery;
@@ -220,7 +220,7 @@ export async function getLeadsOverTime(
       .gte("updated_at", date.toISOString())
       .lt("updated_at", nextDate.toISOString());
 
-    if (role === "telecaller" && staffId) {
+    if (role === "sell_executive" && staffId) {
       newLeadsQuery = newLeadsQuery.eq("assigned_to", staffId);
       convertedQuery = convertedQuery.eq("assigned_to", staffId);
     }
@@ -246,7 +246,7 @@ export async function getIssueBreakdown(
   role?: UserRole
 ): Promise<IssueBreakdown[]> {
   let query = supabase.from("leads").select("issue_reported");
-  if (role === "telecaller" && staffId) {
+  if (role === "sell_executive" && staffId) {
     query = query.eq("assigned_to", staffId);
   }
 
@@ -272,7 +272,7 @@ export async function getTeamPerformance(
   const { data: staff } = await supabase
     .from("staff")
     .select("id, full_name")
-    .in("role", ["telecaller", "manager"])
+    .in("role", ["sell_executive", "operation_manager"])
     .eq("is_active", true);
 
   if (!staff) return [];
@@ -328,7 +328,7 @@ export async function getRecentActivity(
     .order("updated_at", { ascending: false })
     .limit(limit);
 
-  if (role === "telecaller" && staffId) {
+  if (role === "sell_executive" && staffId) {
     leadsQuery = leadsQuery.eq("assigned_to", staffId);
   }
 
@@ -348,7 +348,7 @@ export async function getRecentActivity(
     .order("created_at", { ascending: false })
     .limit(limit);
 
-  if (role === "telecaller" && staffId) {
+  if (role === "sell_executive" && staffId) {
     notesQuery = notesQuery.eq("staff_id", staffId);
   }
 
@@ -420,7 +420,7 @@ export async function getDeviceDistribution(
   role?: UserRole
 ): Promise<{ device_type: DeviceType; count: number }[]> {
   let query = supabase.from("leads").select("device_type");
-  if (role === "telecaller" && staffId) {
+  if (role === "sell_executive" && staffId) {
     query = query.eq("assigned_to", staffId);
   }
 
@@ -445,7 +445,7 @@ export async function getLeadsByStatus(
   role?: UserRole
 ): Promise<{ status: LeadStatus; count: number }[]> {
   let query = supabase.from("leads").select("status");
-  if (role === "telecaller" && staffId) {
+  if (role === "sell_executive" && staffId) {
     query = query.eq("assigned_to", staffId);
   }
 

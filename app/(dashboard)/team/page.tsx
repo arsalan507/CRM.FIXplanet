@@ -20,10 +20,10 @@ export default async function TeamPage() {
     .eq("auth_user_id", user?.id)
     .single();
 
-  const currentUserRole = (currentStaff?.role as UserRole) || "telecaller";
+  const currentUserRole = (currentStaff?.role as UserRole) || "sell_executive";
 
   // Only managers and super_admins can view team performance
-  if (!["super_admin", "manager"].includes(currentUserRole)) {
+  if (!["super_admin", "operation_manager"].includes(currentUserRole)) {
     redirect("/dashboard");
   }
 

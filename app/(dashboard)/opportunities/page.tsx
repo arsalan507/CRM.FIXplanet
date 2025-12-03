@@ -19,7 +19,7 @@ export default async function OpportunitiesPage() {
     .eq("auth_user_id", user?.id)
     .single();
 
-  const currentUserRole = (currentStaff?.role as UserRole) || "telecaller";
+  const currentUserRole = (currentStaff?.role as UserRole) || "sell_executive";
 
   // Get opportunities and stats
   const opportunitiesResult = await getOpportunities();

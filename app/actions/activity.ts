@@ -148,8 +148,11 @@ export async function getActivityStats(daysBack: number = 7) {
   userActivity?.forEach((item) => {
     if (item.user_id) {
       if (!userCounts[item.user_id]) {
+        const userName = Array.isArray(item.user)
+          ? (item.user[0] as { full_name: string })?.full_name
+          : (item.user as { full_name: string } | null)?.full_name || "Unknown";
         userCounts[item.user_id] = {
-          name: (item.user as { full_name: string } | null)?.full_name || "Unknown",
+          name: userName,
           count: 0,
         };
       }

@@ -18,7 +18,7 @@ export default async function NotInterestedPage() {
     .eq("auth_user_id", user?.id)
     .single();
 
-  const currentUserRole = (currentStaff?.role as UserRole) || "telecaller";
+  const currentUserRole = (currentStaff?.role as UserRole) || "sell_executive";
   const currentStaffId = currentStaff?.id;
 
   // Build query based on role - filter by workflow_status = 'Not Interested'
@@ -41,7 +41,7 @@ export default async function NotInterestedPage() {
     .order("created_at", { ascending: false });
 
   // Telecallers only see their assigned leads
-  if (currentUserRole === "telecaller" && currentStaffId) {
+  if (currentUserRole === "sell_executive" && currentStaffId) {
     leadsQuery = leadsQuery.eq("assigned_to", currentStaffId);
   }
 
@@ -56,7 +56,7 @@ export default async function NotInterestedPage() {
     .from("staff")
     .select("id, full_name, role")
     .eq("is_active", true)
-    .in("role", ["telecaller", "manager", "super_admin"])
+    .in("role", ["sell_executive", "operation_manager", "super_admin"])
     .order("full_name");
 
   return (
