@@ -228,31 +228,31 @@ export function InvoiceDetailClient({
                     <td className="py-3">Parts Cost</td>
                     <td className="py-3 text-center">1</td>
                     <td className="py-3 text-right">
-                      {formatCurrency(invoice.parts_cost)}
+                      {formatCurrency(invoice.parts_cost || 0)}
                     </td>
                     <td className="py-3 text-right font-medium">
-                      {formatCurrency(invoice.parts_cost)}
+                      {formatCurrency(invoice.parts_cost || 0)}
                     </td>
                   </tr>
                   <tr className="border-b border-gray-200">
                     <td className="py-3">Labor Cost</td>
                     <td className="py-3 text-center">1</td>
                     <td className="py-3 text-right">
-                      {formatCurrency(invoice.labor_cost)}
+                      {formatCurrency(invoice.labor_cost || 0)}
                     </td>
                     <td className="py-3 text-right font-medium">
-                      {formatCurrency(invoice.labor_cost)}
+                      {formatCurrency(invoice.labor_cost || 0)}
                     </td>
                   </tr>
-                  {invoice.other_charges > 0 && (
+                  {(invoice.other_charges || 0) > 0 && (
                     <tr className="border-b border-gray-200">
                       <td className="py-3">Other Charges</td>
                       <td className="py-3 text-center">1</td>
                       <td className="py-3 text-right">
-                        {formatCurrency(invoice.other_charges)}
+                        {formatCurrency(invoice.other_charges || 0)}
                       </td>
                       <td className="py-3 text-right font-medium">
-                        {formatCurrency(invoice.other_charges)}
+                        {formatCurrency(invoice.other_charges || 0)}
                       </td>
                     </tr>
                   )}
