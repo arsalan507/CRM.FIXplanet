@@ -51,6 +51,9 @@ export interface Lead {
   customer_name: string;
   contact_number: string;
   email: string | null;
+  alternate_mobile?: string | null;
+  area?: string | null;
+  pincode?: string | null;
   device_type: DeviceType;
   device_model: string;
   issue_reported: string;

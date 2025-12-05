@@ -57,10 +57,12 @@ export default function LeadDetailClient({
     customer_name: lead.customer_name,
     contact_number: lead.contact_number,
     email: lead.email || "",
+    alternate_mobile: lead.alternate_mobile || "",
+    area: lead.area || "",
+    pincode: lead.pincode || "",
     device_type: lead.device_type,
     device_model: lead.device_model,
     issue_reported: lead.issue_reported,
-    quoted_amount: lead.quoted_amount || 0,
   });
 
   const handleSaveLead = async () => {
@@ -202,10 +204,12 @@ export default function LeadDetailClient({
                       customer_name: lead.customer_name,
                       contact_number: lead.contact_number,
                       email: lead.email || "",
+                      alternate_mobile: lead.alternate_mobile || "",
+                      area: lead.area || "",
+                      pincode: lead.pincode || "",
                       device_type: lead.device_type,
                       device_model: lead.device_model,
                       issue_reported: lead.issue_reported,
-                      quoted_amount: lead.quoted_amount || 0,
                     });
                   }}
                 >
@@ -266,6 +270,45 @@ export default function LeadDetailClient({
                 </div>
 
                 <div className="space-y-2">
+                  <Label htmlFor="alternate_mobile">Alternate Mobile</Label>
+                  <Input
+                    id="alternate_mobile"
+                    value={editedLead.alternate_mobile}
+                    onChange={(e) =>
+                      setEditedLead({
+                        ...editedLead,
+                        alternate_mobile: e.target.value,
+                      })
+                    }
+                    placeholder="Optional"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="area">Area</Label>
+                  <Input
+                    id="area"
+                    value={editedLead.area}
+                    onChange={(e) =>
+                      setEditedLead({ ...editedLead, area: e.target.value })
+                    }
+                    placeholder="e.g., Koramangala"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="pincode">Pincode</Label>
+                  <Input
+                    id="pincode"
+                    value={editedLead.pincode}
+                    onChange={(e) =>
+                      setEditedLead({ ...editedLead, pincode: e.target.value })
+                    }
+                    placeholder="e.g., 560095"
+                  />
+                </div>
+
+                <div className="space-y-2">
                   <Label htmlFor="device_type">Device Type</Label>
                   <Select
                     value={editedLead.device_type}
@@ -313,21 +356,6 @@ export default function LeadDetailClient({
                     rows={3}
                   />
                 </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="quoted_amount">Quoted Amount (₹)</Label>
-                  <Input
-                    id="quoted_amount"
-                    type="number"
-                    value={editedLead.quoted_amount}
-                    onChange={(e) =>
-                      setEditedLead({
-                        ...editedLead,
-                        quoted_amount: parseFloat(e.target.value) || 0,
-                      })
-                    }
-                  />
-                </div>
               </>
             ) : (
               <>
@@ -346,6 +374,35 @@ export default function LeadDetailClient({
                 )}
 
                 <div className="flex items-center gap-2">
+                  <Phone className="h-4 w-4 text-muted-foreground" />
+                  <span className="font-medium">Alternate Mobile:</span>
+                  {lead.alternate_mobile ? (
+                    <a
+                      href={`tel:${lead.alternate_mobile}`}
+                      className="text-blue-600 hover:underline"
+                    >
+                      {lead.alternate_mobile}
+                    </a>
+                  ) : (
+                    <span className="text-muted-foreground">-</span>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="font-medium">Area:</span>
+                  <span className={lead.area ? "" : "text-muted-foreground"}>
+                    {lead.area || "-"}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="font-medium">Pincode:</span>
+                  <span className={lead.pincode ? "" : "text-muted-foreground"}>
+                    {lead.pincode || "-"}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2">
                   <Smartphone className="h-4 w-4 text-muted-foreground" />
                   <span className="font-medium">Device:</span>
                   <span>
@@ -362,15 +419,6 @@ export default function LeadDetailClient({
                     </p>
                   </div>
                 </div>
-
-                {lead.quoted_amount && (
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium">Quoted Amount:</span>
-                    <span className="text-green-600 font-semibold">
-                      ₹{lead.quoted_amount.toLocaleString("en-IN")}
-                    </span>
-                  </div>
-                )}
               </>
             )}
           </CardContent>

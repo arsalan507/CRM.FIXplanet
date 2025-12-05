@@ -83,6 +83,9 @@ export function LeadDetailModal({
     customer_name: "",
     contact_number: "",
     email: "",
+    alternate_mobile: "",
+    area: "",
+    pincode: "",
     device_type: "",
     device_model: "",
     issue_reported: "",
@@ -124,6 +127,9 @@ export function LeadDetailModal({
         customer_name: lead.customer_name,
         contact_number: lead.contact_number,
         email: lead.email || "",
+        alternate_mobile: lead.alternate_mobile || "",
+        area: lead.area || "",
+        pincode: lead.pincode || "",
         device_type: lead.device_type,
         device_model: lead.device_model,
         issue_reported: lead.issue_reported,
@@ -144,6 +150,9 @@ export function LeadDetailModal({
         customer_name: formData.customer_name,
         contact_number: formData.contact_number,
         email: formData.email || undefined,
+        alternate_mobile: formData.alternate_mobile || undefined,
+        area: formData.area || undefined,
+        pincode: formData.pincode || undefined,
         device_type: formData.device_type,
         device_model: formData.device_model,
         issue_reported: formData.issue_reported,
@@ -292,8 +301,27 @@ export function LeadDetailModal({
                   </a>
                 </div>
                 <div>
+                  <p className="text-gray-500">Alternate Mobile</p>
+                  {lead.alternate_mobile ? (
+                    <a href={`tel:${lead.alternate_mobile}`} className="font-medium text-blue-600 hover:underline flex items-center gap-1">
+                      <Phone className="h-3 w-3" />
+                      {formatPhoneNumber(lead.alternate_mobile)}
+                    </a>
+                  ) : (
+                    <p className="font-medium">-</p>
+                  )}
+                </div>
+                <div>
                   <p className="text-gray-500">Email</p>
                   <p className="font-medium">{lead.email || "-"}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500">Area</p>
+                  <p className="font-medium">{lead.area || "-"}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500">Pincode</p>
+                  <p className="font-medium">{lead.pincode || "-"}</p>
                 </div>
                 <div>
                   <p className="text-gray-500">Lead Source</p>
@@ -318,13 +346,41 @@ export function LeadDetailModal({
                     className="border-black"
                   />
                 </div>
-                <div className="space-y-2 col-span-2">
+                <div className="space-y-2">
+                  <Label>Alternate Mobile</Label>
+                  <Input
+                    value={formData.alternate_mobile}
+                    onChange={(e) => setFormData({ ...formData, alternate_mobile: e.target.value })}
+                    className="border-black"
+                    placeholder="Optional"
+                  />
+                </div>
+                <div className="space-y-2">
                   <Label>Email</Label>
                   <Input
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     className="border-black"
+                    placeholder="Optional"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Area</Label>
+                  <Input
+                    value={formData.area}
+                    onChange={(e) => setFormData({ ...formData, area: e.target.value })}
+                    className="border-black"
+                    placeholder="e.g., Koramangala"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Pincode</Label>
+                  <Input
+                    value={formData.pincode}
+                    onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
+                    className="border-black"
+                    placeholder="e.g., 560095"
                   />
                 </div>
               </div>

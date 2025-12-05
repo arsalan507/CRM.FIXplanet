@@ -243,6 +243,9 @@ export async function updateLead(
     customer_name?: string;
     contact_number?: string;
     email?: string;
+    alternate_mobile?: string;
+    area?: string;
+    pincode?: string;
     device_type?: string;
     device_model?: string;
     issue_reported?: string;
@@ -300,6 +303,9 @@ export async function createLead(data: {
   customer_name: string;
   contact_number: string;
   email?: string;
+  alternate_mobile?: string;
+  area?: string;
+  pincode?: string;
   device_type: string;
   device_model: string;
   issue_reported: string;

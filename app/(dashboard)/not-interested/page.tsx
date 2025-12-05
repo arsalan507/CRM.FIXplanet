@@ -71,6 +71,7 @@ export default async function NotInterestedPage() {
         leads={(leads as Lead[]) || []}
         staffList={(staffList as Staff[]) || []}
         currentUserRole={currentUserRole}
+        showNewLeadButton={false}
       />
     </div>
   );

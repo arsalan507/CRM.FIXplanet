@@ -258,8 +258,6 @@ export function EnhancedLeadsTable({
               <TableHead className="font-semibold text-black">Contact</TableHead>
               <TableHead className="font-semibold text-black">Device</TableHead>
               <TableHead className="font-semibold text-black">Issue</TableHead>
-              <TableHead className="font-semibold text-black">Priority</TableHead>
-              <TableHead className="font-semibold text-black">Status</TableHead>
               <TableHead className="font-semibold text-black">Assigned To</TableHead>
               <TableHead className="font-semibold text-black">Created</TableHead>
               <TableHead className="font-semibold text-black w-[80px]">Actions</TableHead>
@@ -268,7 +266,7 @@ export function EnhancedLeadsTable({
           <TableBody>
             {paginatedLeads.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={9} className="h-24 text-center text-gray-500">
+                <TableCell colSpan={7} className="h-24 text-center text-gray-500">
                   No leads found.
                 </TableCell>
               </TableRow>
@@ -307,28 +305,6 @@ export function EnhancedLeadsTable({
                   </TableCell>
                   <TableCell>
                     <span className="text-sm text-black">{lead.issue_reported}</span>
-                  </TableCell>
-                  <TableCell>{getPriorityBadge(lead.priority)}</TableCell>
-                  <TableCell onClick={(e) => e.stopPropagation()}>
-                    {loadingLeadId === lead.id ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <Select
-                        value={lead.status}
-                        onValueChange={(v) => handleStatusChange(lead.id, v as LeadStatus)}
-                      >
-                        <SelectTrigger className="h-8 w-[130px] border-0 bg-transparent p-0">
-                          {getStatusBadge(lead.status)}
-                        </SelectTrigger>
-                        <SelectContent>
-                          {LEAD_STATUSES.map((status) => (
-                            <SelectItem key={status} value={status} className="capitalize">
-                              {status.replace("_", " ")}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
                   </TableCell>
                   <TableCell>
                     {lead.staff ? (

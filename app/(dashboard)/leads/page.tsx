@@ -64,6 +64,13 @@ export default async function LeadsPage() {
       leads={(leads as Lead[]) || []}
       staffList={(staffList as Staff[]) || []}
       currentUserRole={currentUserRole}
+      pageTitle="Enquiry"
+      pageDescription={
+        currentUserRole === "sell_executive"
+          ? "Manage your assigned leads"
+          : "Manage and track all incoming repair requests"
+      }
+      showNewLeadButton={true}
     />
   );
 }

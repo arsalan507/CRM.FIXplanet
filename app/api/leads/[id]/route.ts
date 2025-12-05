@@ -23,10 +23,12 @@ export async function PATCH(
       customer_name,
       contact_number,
       email,
+      alternate_mobile,
+      area,
+      pincode,
       device_type,
       device_model,
       issue_reported,
-      quoted_amount,
     } = body;
 
     // Update lead
@@ -36,10 +38,12 @@ export async function PATCH(
         customer_name,
         contact_number,
         email,
+        alternate_mobile,
+        area,
+        pincode,
         device_type,
         device_model,
         issue_reported,
-        quoted_amount,
         updated_at: new Date().toISOString(),
       })
       .eq("id", id)

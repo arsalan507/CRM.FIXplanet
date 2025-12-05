@@ -12,12 +12,18 @@ interface LeadsPageClientProps {
   leads: Lead[];
   staffList: Staff[];
   currentUserRole: UserRole;
+  pageTitle?: string;
+  pageDescription?: string;
+  showNewLeadButton?: boolean;
 }
 
 export function LeadsPageClient({
   leads,
   staffList,
   currentUserRole,
+  pageTitle,
+  pageDescription,
+  showNewLeadButton = true,
 }: LeadsPageClientProps) {
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [modalMode, setModalMode] = useState<"view" | "edit">("view");
@@ -45,22 +51,22 @@ export function LeadsPageClient({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-black">Leads</h1>
-          <p className="text-sm text-gray-500">
-            {currentUserRole === "sell_executive"
-              ? "Manage your assigned leads"
-              : "Manage and track all incoming repair requests"}
-          </p>
+      {(pageTitle || pageDescription || showNewLeadButton) && (
+        <div className="flex items-center justify-between">
+          {(pageTitle || pageDescription) && (
+            <div>
+              {pageTitle && <h1 className="text-2xl font-bold text-black">{pageTitle}</h1>}
+              {pageDescription && <p className="text-sm text-gray-500">{pageDescription}</p>}
+            </div>
+          )}
+          {showNewLeadButton && canCreate && (
+            <Button onClick={() => setIsCreateOpen(true)}>
+              <Plus className="h-4 w-4 mr-2" />
+              New Lead
+            </Button>
+          )}
         </div>
-        {canCreate && (
-          <Button onClick={() => setIsCreateOpen(true)}>
-            <Plus className="h-4 w-4 mr-2" />
-            New Lead
-          </Button>
-        )}
-      </div>
+      )}
 
       <EnhancedLeadsTable
         leads={leads}
