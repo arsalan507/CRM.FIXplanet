@@ -436,7 +436,7 @@ export function InvoicePDFTemplate({ invoice }: InvoicePDFTemplateProps) {
         </Text>
 
         <Text style={styles.termItem}>
-          3. All items taken for repair are at the customer's risk.
+          3. All items taken for repair are at the customer&apos;s risk.
         </Text>
 
         <Text style={styles.termItem}>

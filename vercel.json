@@ -1,0 +1,6 @@
+{
+  "project": "crm-fixplanet",
+  "buildCommand": "next build",
+  "devCommand": "next dev",
+  "installCommand": "npm install"
+}
