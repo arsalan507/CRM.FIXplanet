@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
-import { Loader2 } from "lucide-react";
+import { Loader2, CheckCircle2 } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -16,8 +17,26 @@ export default function LoginPage() {
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState<"credentials" | "otp">("credentials");
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [loadingMessage, setLoadingMessage] = useState("");
+  const [loginSuccess, setLoginSuccess] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
+
+  // Animate progress bar
+  useEffect(() => {
+    if (isLoading && loadingProgress < 90) {
+      const interval = setInterval(() => {
+        setLoadingProgress((prev) => {
+          if (prev < 30) return prev + 15;
+          if (prev < 60) return prev + 10;
+          if (prev < 90) return prev + 5;
+          return prev;
+        });
+      }, 300);
+      return () => clearInterval(interval);
+    }
+  }, [isLoading, loadingProgress]);
 
   const supabase = useMemo(() => {
     if (typeof window !== "undefined") {
@@ -30,8 +49,13 @@ export default function LoginPage() {
     e.preventDefault();
     if (!supabase) return;
     setIsLoading(true);
+    setLoadingProgress(0);
+    setLoginSuccess(false);
 
     try {
+      setLoadingMessage("Authenticating...");
+      setLoadingProgress(20);
+
       // Sign in with email and password
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -45,10 +69,14 @@ export default function LoginPage() {
           variant: "destructive",
         });
         setIsLoading(false);
+        setLoadingProgress(0);
         return;
       }
 
       if (data.user) {
+        setLoadingMessage("Verifying account...");
+        setLoadingProgress(50);
+
         // Check if user exists in staff table
         const { data: staffData, error: staffError } = await supabase
           .from("staff")
@@ -64,6 +92,7 @@ export default function LoginPage() {
           });
           await supabase.auth.signOut();
           setIsLoading(false);
+          setLoadingProgress(0);
           return;
         }
 
@@ -75,8 +104,12 @@ export default function LoginPage() {
           });
           await supabase.auth.signOut();
           setIsLoading(false);
+          setLoadingProgress(0);
           return;
         }
+
+        setLoadingMessage("Loading dashboard...");
+        setLoadingProgress(80);
 
         // Login successful
         toast({
@@ -84,8 +117,14 @@ export default function LoginPage() {
           description: `Logged in as ${staffData.full_name}`,
         });
 
-        router.push("/dashboard");
-        router.refresh();
+        setLoginSuccess(true);
+        setLoadingProgress(100);
+
+        // Small delay to show success state
+        setTimeout(() => {
+          router.push("/dashboard");
+          router.refresh();
+        }, 500);
       }
     } catch {
       toast({
@@ -93,8 +132,8 @@ export default function LoginPage() {
         description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
-    } finally {
       setIsLoading(false);
+      setLoadingProgress(0);
     }
   };
 
@@ -158,6 +197,25 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {isLoading && (
+            <div className="mb-6 space-y-3">
+              <div className="flex items-center justify-center gap-2 text-sm font-medium">
+                {loginSuccess ? (
+                  <>
+                    <CheckCircle2 className="h-4 w-4 text-green-600 animate-in fade-in zoom-in" />
+                    <span className="text-green-600">Login successful!</span>
+                  </>
+                ) : (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span>{loadingMessage}</span>
+                  </>
+                )}
+              </div>
+              <Progress value={loadingProgress} className="h-2" />
+            </div>
+          )}
+
           {step === "credentials" ? (
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">

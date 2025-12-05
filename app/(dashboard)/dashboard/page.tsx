@@ -28,7 +28,7 @@ import { getRevenueMetrics } from "@/app/actions/invoices";
 import type { UserRole } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
-export const revalidate = 60; // Revalidate every 60 seconds
+export const revalidate = 0; // Always fetch fresh data for dashboard
 
 export default async function DashboardPage() {
   const supabase = await createClient();

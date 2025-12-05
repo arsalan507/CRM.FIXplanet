@@ -28,6 +28,7 @@ import {
   Save,
   Edit,
 } from "lucide-react";
+import { InlineInvoiceForm } from "@/components/invoices/inline-invoice-form";
 
 interface LeadDetailClientProps {
   lead: Lead;
@@ -166,16 +167,6 @@ export default function LeadDetailClient({
           <Badge className={getStatusBadgeColor(lead.workflow_status || "new")}>
             {lead.workflow_status || "new"}
           </Badge>
-          {isOrderStatus && (
-            <Button
-              onClick={() => router.push(`/invoices?leadId=${lead.id}`)}
-              variant="default"
-              size="sm"
-            >
-              <FileText className="h-4 w-4 mr-2" />
-              Add Invoice
-            </Button>
-          )}
         </div>
       </div>
 
@@ -534,6 +525,22 @@ export default function LeadDetailClient({
           )}
         </CardContent>
       </Card>
+
+      {/* Invoice Form - Only show for Order status */}
+      {isOrderStatus && (
+        <InlineInvoiceForm
+          leadId={lead.id}
+          customerName={lead.customer_name}
+          customerPhone={lead.contact_number}
+          customerEmail={lead.email}
+          deviceType={lead.device_type}
+          deviceModel={lead.device_model}
+          issue={lead.issue_reported}
+          onSuccess={() => {
+            router.refresh();
+          }}
+        />
+      )}
     </div>
   );
 }
