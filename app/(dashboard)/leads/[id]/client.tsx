@@ -79,6 +79,14 @@ export default function LeadDetailClient({
         throw new Error("Failed to update lead");
       }
 
+      const updatedLead = await response.json();
+
+      // Update local state with the new data
+      setLead({
+        ...lead,
+        ...editedLead,
+      });
+
       toast.success("Lead updated successfully");
       setIsEditing(false);
       router.refresh();

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { EnhancedLeadsTable } from "@/components/tables/enhanced-leads-table";
-import { LeadDetailModal } from "@/components/leads/lead-detail-modal";
 import { CreateLeadModal } from "@/components/leads/create-lead-modal";
 import type { Lead, Staff, UserRole } from "@/lib/types";
 import { Plus } from "lucide-react";
@@ -25,27 +24,7 @@ export function LeadsPageClient({
   pageDescription,
   showNewLeadButton = true,
 }: LeadsPageClientProps) {
-  const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
-  const [modalMode, setModalMode] = useState<"view" | "edit">("view");
-  const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
-
-  const handleViewLead = (lead: Lead) => {
-    setSelectedLead(lead);
-    setModalMode("view");
-    setIsDetailOpen(true);
-  };
-
-  const handleEditLead = (lead: Lead) => {
-    setSelectedLead(lead);
-    setModalMode("edit");
-    setIsDetailOpen(true);
-  };
-
-  const handleCloseDetail = () => {
-    setIsDetailOpen(false);
-    setSelectedLead(null);
-  };
 
   const canCreate = ["super_admin", "operation_manager", "sell_executive"].includes(currentUserRole);
 
@@ -72,17 +51,6 @@ export function LeadsPageClient({
         leads={leads}
         staffList={staffList}
         currentUserRole={currentUserRole}
-        onViewLead={handleViewLead}
-        onEditLead={handleEditLead}
-      />
-
-      <LeadDetailModal
-        lead={selectedLead}
-        isOpen={isDetailOpen}
-        onClose={handleCloseDetail}
-        staffList={staffList}
-        currentUserRole={currentUserRole}
-        mode={modalMode}
       />
 
       <CreateLeadModal

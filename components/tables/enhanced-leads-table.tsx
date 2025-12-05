@@ -36,7 +36,6 @@ import {
   Phone,
   Smartphone,
   MoreHorizontal,
-  Eye,
   Pencil,
   Trash2,
   ChevronLeft,
@@ -56,8 +55,6 @@ interface EnhancedLeadsTableProps {
   leads: Lead[];
   staffList: Staff[];
   currentUserRole: UserRole;
-  onViewLead: (lead: Lead) => void;
-  onEditLead: (lead: Lead) => void;
 }
 
 const ITEMS_PER_PAGE = 20;
@@ -66,8 +63,6 @@ export function EnhancedLeadsTable({
   leads,
   staffList,
   currentUserRole,
-  onViewLead,
-  onEditLead,
 }: EnhancedLeadsTableProps) {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -326,14 +321,10 @@ export function EnhancedLeadsTable({
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => onViewLead(lead)}>
-                          <Eye className="mr-2 h-4 w-4" />
-                          View Details
-                        </DropdownMenuItem>
                         {canEdit && (
-                          <DropdownMenuItem onClick={() => onEditLead(lead)}>
+                          <DropdownMenuItem onClick={() => router.push(`/leads/${lead.id}`)}>
                             <Pencil className="mr-2 h-4 w-4" />
-                            Edit Lead
+                            Edit
                           </DropdownMenuItem>
                         )}
                         {canDelete && (

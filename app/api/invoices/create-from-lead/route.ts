@@ -14,6 +14,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    // Get staff record for created_by field
+    const { data: staffData } = await supabase
+      .from("staff")
+      .select("id")
+      .eq("auth_user_id", user.id)
+      .single();
+
     const body = await request.json();
     const {
       leadId,
@@ -27,9 +34,7 @@ export async function POST(request: NextRequest) {
       subtotal,
       taxRate,
       taxAmount,
-      discountAmount,
       total,
-      notes,
       terms,
     } = body;
 
@@ -40,7 +45,10 @@ export async function POST(request: NextRequest) {
 
     const invoiceNumber = `INV-${String((count || 0) + 1).padStart(5, "0")}`;
 
-    // Create invoice
+    // Calculate parts_cost (sum of all line items)
+    const parts_cost = lineItems.reduce((sum: number, item: any) => sum + item.amount, 0);
+
+    // Create invoice using SimplifiedInvoice format
     const { data: invoice, error: invoiceError } = await supabase
       .from("invoices")
       .insert({
@@ -52,15 +60,21 @@ export async function POST(request: NextRequest) {
         device_type: deviceType,
         device_model: deviceModel,
         issue: issue,
-        items: lineItems,
+        parts_cost: parts_cost,
+        labor_cost: 0,
+        other_charges: 0,
         subtotal: subtotal,
         gst_included: taxRate > 0,
         gst_amount: taxAmount,
-        discount_amount: discountAmount,
         total_amount: total,
-        notes: notes,
+        payment_status: 'pending',
+        paid_at: null,
+        pdf_url: null,
         terms_conditions: terms,
+        invoice_date: new Date().toISOString(),
+        created_by: staffData?.id || null,
         created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       })
       .select()
       .single();

@@ -277,9 +277,9 @@ export function InvoicePDFTemplate({ invoice }: InvoicePDFTemplateProps) {
             <Text style={styles.companyName}>FIXPLANET</Text>
             <Text style={styles.companyDetails}>
               GSTIN: 29ABEPQ7491G1Z4{"\n"}
-              1st Floor, 368, 80 Feet Rd, above Global Access,{"\n"}
-              next to KFC, KHB Colony, 7th Block, Koramangala,{"\n"}
-              Bengaluru, Karnataka 560095
+              Ground Floor, Nexus Koramangala Mall, 22, Hosur Rd,{"\n"}
+              beside Prestige Acropolis, Chikku Lakshmaiah Layout,{"\n"}
+              Adugodi, Bengaluru, Karnataka 560030
             </Text>
           </View>
 

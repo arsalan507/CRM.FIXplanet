@@ -56,7 +56,6 @@ export function InlineInvoiceForm({
   const [showTax, setShowTax] = useState(false);
   const [taxRate, setTaxRate] = useState(18);
   const [discountAmount, setDiscountAmount] = useState(0);
-  const [notes, setNotes] = useState("");
   const [terms, setTerms] = useState(DEFAULT_TERMS);
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -130,7 +129,6 @@ export function InlineInvoiceForm({
           taxAmount,
           discountAmount,
           total,
-          notes,
           terms,
         }),
       });
@@ -207,6 +205,7 @@ export function InlineInvoiceForm({
                         parseInt(e.target.value) || 1
                       )
                     }
+                    className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
                 <div className="col-span-2">
@@ -222,6 +221,7 @@ export function InlineInvoiceForm({
                         parseFloat(e.target.value) || 0
                       )
                     }
+                    className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
                 <div className="col-span-2">
@@ -282,7 +282,7 @@ export function InlineInvoiceForm({
                     onChange={(e) =>
                       setTaxRate(parseFloat(e.target.value) || 0)
                     }
-                    className="w-20"
+                    className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                   <Button
                     type="button"
@@ -309,6 +309,7 @@ export function InlineInvoiceForm({
                 onChange={(e) =>
                   setDiscountAmount(parseFloat(e.target.value) || 0)
                 }
+                className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
             </div>
 
@@ -319,33 +320,18 @@ export function InlineInvoiceForm({
           </div>
         </div>
 
-        {/* Additional Information */}
-        <div className="space-y-4">
-          <Label className="text-base font-semibold">
-            Additional Information
+        {/* Terms & Conditions */}
+        <div className="space-y-2">
+          <Label htmlFor="terms" className="text-base font-semibold">
+            Terms & Conditions
           </Label>
-
-          <div className="space-y-2">
-            <Label htmlFor="notes">Notes (Optional)</Label>
-            <Textarea
-              id="notes"
-              placeholder="Any additional notes for this invoice"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows={3}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="terms">Terms & Conditions</Label>
-            <Textarea
-              id="terms"
-              value={terms}
-              onChange={(e) => setTerms(e.target.value)}
-              rows={12}
-              className="font-mono text-xs"
-            />
-          </div>
+          <Textarea
+            id="terms"
+            value={terms}
+            onChange={(e) => setTerms(e.target.value)}
+            rows={12}
+            className="font-mono text-xs"
+          />
         </div>
 
         {/* Generate Button */}
