@@ -272,7 +272,7 @@ export function InvoiceDetailClient({
                         GST (18%):
                       </td>
                       <td className="py-2 text-right">
-                        {formatCurrency(invoice.gst_amount)}
+                        {formatCurrency(invoice.gst_amount || 0)}
                       </td>
                     </tr>
                   )}
@@ -282,7 +282,7 @@ export function InvoiceDetailClient({
                         Discount:
                       </td>
                       <td className="py-2 text-right">
-                        -{formatCurrency(invoice.discount_amount)}
+                        -{formatCurrency(invoice.discount_amount || 0)}
                       </td>
                     </tr>
                   )}
