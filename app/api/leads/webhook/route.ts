@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 
 // Helper function to extract UTM parameters from URL
 function extractUTMParams(url: string) {
@@ -167,7 +167,17 @@ export async function POST(request: NextRequest) {
     });
 
     // 6. Check for duplicate (same phone in last 24 hours)
-    const supabase = await createClient();
+    // Use service role key to bypass RLS for webhook operations
+    const supabase = createSupabaseClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    );
     const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
     const { data: existingLead, error: checkError } = await supabase
