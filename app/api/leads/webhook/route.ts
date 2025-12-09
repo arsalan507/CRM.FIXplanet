@@ -83,10 +83,6 @@ export async function POST(request: NextRequest) {
     const apiKey = request.headers.get("X-API-Key") || request.headers.get("x-api-key");
     const validApiKey = process.env.LEAD_WEBHOOK_API_KEY;
 
-    console.log("[Lead Webhook] Received API Key length:", apiKey?.length);
-    console.log("[Lead Webhook] Valid API Key length:", validApiKey?.length);
-    console.log("[Lead Webhook] Keys match:", apiKey === validApiKey);
-
     if (!validApiKey) {
       console.error("[Lead Webhook] LEAD_WEBHOOK_API_KEY not configured in environment");
       return NextResponse.json(
@@ -97,10 +93,6 @@ export async function POST(request: NextRequest) {
 
     if (apiKey !== validApiKey) {
       console.warn("[Lead Webhook] Invalid API key attempt");
-      console.warn("[Lead Webhook] Received key starts with:", apiKey?.substring(0, 10));
-      console.warn("[Lead Webhook] Expected key starts with:", validApiKey?.substring(0, 10));
-      console.warn("[Lead Webhook] Received key ends with:", apiKey?.substring(apiKey.length - 10));
-      console.warn("[Lead Webhook] Expected key ends with:", validApiKey?.substring(validApiKey.length - 10));
       return NextResponse.json(
         { success: false, error: "Unauthorized - Invalid API key" },
         { status: 401 }
