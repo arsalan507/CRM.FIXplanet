@@ -64,7 +64,7 @@ export default function LeadDetailClient({
     device_type: lead.device_type,
     device_model: lead.device_model,
     issue_reported: lead.issue_reported,
-    quoted_amount: lead.quoted_amount || null,
+    quoted_amount: lead.quoted_amount,
   });
 
   const handleSaveLead = async () => {
@@ -210,7 +210,7 @@ export default function LeadDetailClient({
                       device_type: lead.device_type,
                       device_model: lead.device_model,
                       issue_reported: lead.issue_reported,
-                      quoted_amount: lead.quoted_amount || null,
+                      quoted_amount: lead.quoted_amount,
                     });
                   }}
                 >
@@ -240,7 +240,7 @@ export default function LeadDetailClient({
                     onChange={(e) =>
                       setEditedLead({
                         ...editedLead,
-                        quoted_amount: e.target.value ? parseFloat(e.target.value) : null,
+                        quoted_amount: e.target.value ? parseFloat(e.target.value) : undefined,
                       })
                     }
                   />
