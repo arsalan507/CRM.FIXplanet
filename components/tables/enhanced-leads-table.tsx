@@ -253,7 +253,7 @@ export function EnhancedLeadsTable({
               <TableHead className="font-semibold text-black">Contact</TableHead>
               <TableHead className="font-semibold text-black">Device</TableHead>
               <TableHead className="font-semibold text-black">Issue</TableHead>
-              <TableHead className="font-semibold text-black">Assigned To</TableHead>
+              <TableHead className="font-semibold text-black">Last Remark</TableHead>
               <TableHead className="font-semibold text-black">Created</TableHead>
               <TableHead className="font-semibold text-black w-[80px]">Actions</TableHead>
             </TableRow>
@@ -302,10 +302,14 @@ export function EnhancedLeadsTable({
                     <span className="text-sm text-black">{lead.issue_reported}</span>
                   </TableCell>
                   <TableCell>
-                    {lead.staff ? (
-                      <span className="text-sm text-black">{lead.staff.full_name}</span>
+                    {lead.remarks && lead.remarks.length > 0 ? (
+                      <span className="text-sm text-gray-600 truncate max-w-[200px] block">
+                        {[...lead.remarks].sort((a, b) =>
+                          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+                        )[0].remark}
+                      </span>
                     ) : (
-                      <span className="text-sm text-gray-400">Unassigned</span>
+                      <span className="text-sm text-gray-400">-</span>
                     )}
                   </TableCell>
                   <TableCell>

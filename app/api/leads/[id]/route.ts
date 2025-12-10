@@ -29,6 +29,7 @@ export async function PATCH(
       device_type,
       device_model,
       issue_reported,
+      quoted_amount,
     } = body;
 
     // Update lead
@@ -44,6 +45,7 @@ export async function PATCH(
         device_type,
         device_model,
         issue_reported,
+        quoted_amount,
         updated_at: new Date().toISOString(),
       })
       .eq("id", id)

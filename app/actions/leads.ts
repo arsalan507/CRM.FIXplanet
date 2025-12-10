@@ -470,7 +470,7 @@ export async function getStaffList() {
     .from("staff")
     .select("id, full_name, role")
     .eq("is_active", true)
-    .in("role", ["sell_executive", "technician", "operation_manager", "admin", "super_admin"])
+    .in("role", ["sales_executive", "technician", "field_executive", "manager", "super_admin"])
     .order("full_name");
 
   if (error) {
@@ -486,10 +486,10 @@ export async function getNewLeadsCount(staffId?: string, role?: string) {
   let query = supabase
     .from("leads")
     .select("id", { count: "exact", head: true })
-    .eq("status", "new");
+    .or("workflow_status.eq.new,workflow_status.is.null");
 
-  // Sell executives and technicians only see their assigned leads
-  if (role && ["sell_executive", "technician"].includes(role) && staffId) {
+  // Sales executives and technicians only see their assigned leads
+  if (role && ["sales_executive", "technician"].includes(role) && staffId) {
     query = query.eq("assigned_to", staffId);
   }
 

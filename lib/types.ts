@@ -1,4 +1,4 @@
-export type UserRole = "super_admin" | "admin" | "technician" | "sell_executive" | "operation_manager";
+export type UserRole = "super_admin" | "manager" | "sales_executive" | "field_executive" | "technician";
 export type LeadStatus = "new" | "contacted" | "interested" | "quoted" | "won" | "lost" | "in_repair" | "completed" | "delivered";
 export type LeadWorkflowStatus = "new" | "Order" | "Not Interested" | "Follow Up";
 export type DeviceType = "iPhone" | "Apple Watch" | "MacBook" | "iPad";

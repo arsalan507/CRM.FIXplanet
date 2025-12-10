@@ -26,7 +26,7 @@ export function LeadsPageClient({
 }: LeadsPageClientProps) {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
-  const canCreate = ["super_admin", "operation_manager", "sell_executive"].includes(currentUserRole);
+  const canCreate = ["super_admin", "manager", "sales_executive"].includes(currentUserRole);
 
   return (
     <div className="space-y-6">

@@ -292,10 +292,10 @@ export function InvoicesClient({
                     {formatCurrency(invoice.total_amount)}
                   </TableCell>
                   <TableCell className="text-green-600">
-                    {formatCurrency(invoice.amount_paid)}
+                    {formatCurrency(invoice.payment_status === 'paid' ? invoice.total_amount : (invoice.amount_paid || 0))}
                   </TableCell>
                   <TableCell className="text-red-600">
-                    {formatCurrency(invoice.amount_due || 0)}
+                    {formatCurrency(invoice.payment_status === 'paid' ? 0 : (invoice.amount_due || invoice.total_amount))}
                   </TableCell>
                   <TableCell>{getStatusBadge(invoice.payment_status)}</TableCell>
                   <TableCell className="text-right">

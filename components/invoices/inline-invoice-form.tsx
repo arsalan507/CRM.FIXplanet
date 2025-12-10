@@ -6,6 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Plus, X, Receipt } from "lucide-react";
 import { toast } from "sonner";
 
@@ -57,6 +64,7 @@ export function InlineInvoiceForm({
   const [taxRate, setTaxRate] = useState(18);
   const [discountAmount, setDiscountAmount] = useState(0);
   const [terms, setTerms] = useState(DEFAULT_TERMS);
+  const [paymentMethod, setPaymentMethod] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState(false);
 
   // Calculate amounts
@@ -104,6 +112,11 @@ export function InlineInvoiceForm({
       return;
     }
 
+    if (!paymentMethod) {
+      toast.error("Please select a payment method");
+      return;
+    }
+
     setIsGenerating(true);
 
     try {
@@ -130,6 +143,7 @@ export function InlineInvoiceForm({
           discountAmount,
           total,
           terms,
+          paymentMethod,
         }),
       });
 
@@ -318,6 +332,21 @@ export function InlineInvoiceForm({
               <span>₹{total.toFixed(2)}</span>
             </div>
           </div>
+        </div>
+
+        {/* Payment Method */}
+        <div className="space-y-2">
+          <Label className="text-base font-semibold">Payment Method *</Label>
+          <Select value={paymentMethod} onValueChange={setPaymentMethod}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select payment method" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Cash">Cash</SelectItem>
+              <SelectItem value="UPI">UPI</SelectItem>
+              <SelectItem value="Card">Card</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Terms & Conditions */}

@@ -18,7 +18,7 @@ export default async function CustomersPage() {
     .eq("auth_user_id", user?.id)
     .single();
 
-  const currentUserRole = (currentStaff?.role as UserRole) || "sell_executive";
+  const currentUserRole = (currentStaff?.role as UserRole) || "sales_executive";
 
   // Get customers with their leads
   const { data: customers } = await supabase

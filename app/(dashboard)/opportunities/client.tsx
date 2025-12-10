@@ -74,7 +74,7 @@ export function OpportunitiesPageClient({
     setLoadingLeadId(null);
   };
 
-  const canEdit = ["super_admin", "operation_manager"].includes(currentUserRole);
+  const canEdit = ["super_admin", "manager"].includes(currentUserRole);
   const canDelete = ["super_admin"].includes(currentUserRole);
 
   const getStatusColor = (status: string) => {

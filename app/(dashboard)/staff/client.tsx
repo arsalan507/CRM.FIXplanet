@@ -57,29 +57,15 @@ interface StaffPageClientProps {
 
 const ROLES: { value: UserRole; label: string }[] = [
   { value: "super_admin", label: "Super admin" },
-  { value: "admin", label: "Admin" },
+  { value: "manager", label: "Manager" },
+  { value: "sales_executive", label: "Sales executive" },
+  { value: "field_executive", label: "Field executive" },
   { value: "technician", label: "Technician" },
-  { value: "sell_executive", label: "Sell executive" },
-  { value: "operation_manager", label: "Operation manager" },
 ];
 
-const PERMISSIONS = [
-  { key: "search", label: "search" },
-  { key: "follow_up", label: "follow Up" },
-  { key: "decline", label: "Decline" },
-  { key: "report", label: "report" },
-  { key: "add_source", label: "add_source" },
-  { key: "enquiry_form", label: "Enquiry form" },
-  { key: "booking", label: "booking" },
-  { key: "order", label: "order" },
-  { key: "not_repairable", label: "not repairable" },
-  { key: "enquiry_not_verify", label: "enquiry_not_verify" },
-  { key: "add_lead_status", label: "Add lead status" },
-  { key: "enquiry", label: "Enquiry" },
-  { key: "invoice", label: "invoice" },
-  { key: "not_interested", label: "Not Interested" },
-  { key: "user", label: "user" },
-  { key: "add_products", label: "Add products" },
+const PERMISSIONS: { key: string; label: string }[] = [
+  // Currently, permissions are role-based only
+  // Add specific permissions here if needed in the future
 ];
 
 export function StaffPageClient({ staff: initialStaff, currentUserRole }: StaffPageClientProps) {
@@ -92,7 +78,7 @@ export function StaffPageClient({ staff: initialStaff, currentUserRole }: StaffP
   const [formData, setFormData] = useState({
     full_name: "",
     email: "",
-    role: "sell_executive" as UserRole,
+    role: "sales_executive" as UserRole,
     phone: "",
     employee_id: "",
     password: "",
@@ -109,12 +95,18 @@ export function StaffPageClient({ staff: initialStaff, currentUserRole }: StaffP
     }
 
     startTransition(async () => {
+      // Auto-generate a simple employee ID based on name and timestamp
+      // Format: First 3 letters of name + last 4 digits of timestamp
+      const namePrefix = formData.full_name.trim().substring(0, 3).toUpperCase();
+      const timestamp = Date.now().toString().slice(-4);
+      const autoEmployeeId = `${namePrefix}${timestamp}`;
+
       const result = await createStaff({
         full_name: formData.full_name,
         email: formData.email,
         role: formData.role,
         phone: formData.phone || undefined,
-        employee_id: formData.employee_id || undefined,
+        employee_id: autoEmployeeId,
         password: formData.password,
         permissions: formData.permissions,
       });
@@ -122,7 +114,7 @@ export function StaffPageClient({ staff: initialStaff, currentUserRole }: StaffP
       if (result.success) {
         toast({ title: "Success", description: "Staff member created" });
         setIsCreateOpen(false);
-        setFormData({ full_name: "", email: "", role: "sell_executive", phone: "", employee_id: "", password: "", permissions: {} });
+        setFormData({ full_name: "", email: "", role: "sales_executive", phone: "", employee_id: "", password: "", permissions: {} });
       } else {
         toast({ title: "Error", description: result.error, variant: "destructive" });
       }
@@ -216,7 +208,7 @@ export function StaffPageClient({ staff: initialStaff, currentUserRole }: StaffP
 
   const canManageRole = (targetRole: UserRole): boolean => {
     if (currentUserRole === "super_admin") return true;
-    if (currentUserRole === "admin" && targetRole !== "super_admin") return true;
+    if (currentUserRole === "manager" && targetRole !== "super_admin") return true;
     return false;
   };
 
@@ -419,33 +411,27 @@ export function StaffPageClient({ staff: initialStaff, currentUserRole }: StaffP
                 </SelectContent>
               </Select>
             </div>
-            <div className="space-y-2">
-              <Label>Emp id *</Label>
-              <Input
-                placeholder="enter emp id"
-                value={formData.employee_id}
-                onChange={(e) => setFormData({ ...formData, employee_id: e.target.value })}
-              />
-            </div>
           </div>
 
-          <div className="mt-6">
-            <h3 className="font-medium mb-4">select page</h3>
-            <div className="grid grid-cols-4 gap-4">
-              {PERMISSIONS.map((perm) => (
-                <div key={perm.key} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={`create-${perm.key}`}
-                    checked={formData.permissions[perm.key] || false}
-                    onCheckedChange={() => togglePermission(perm.key)}
-                  />
-                  <label htmlFor={`create-${perm.key}`} className="text-sm cursor-pointer">
-                    {perm.label}
-                  </label>
-                </div>
-              ))}
+          {PERMISSIONS.length > 0 && (
+            <div className="mt-6">
+              <h3 className="font-medium mb-4">Permissions</h3>
+              <div className="grid grid-cols-4 gap-4">
+                {PERMISSIONS.map((perm) => (
+                  <div key={perm.key} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`create-${perm.key}`}
+                      checked={formData.permissions[perm.key] || false}
+                      onCheckedChange={() => togglePermission(perm.key)}
+                    />
+                    <label htmlFor={`create-${perm.key}`} className="text-sm cursor-pointer">
+                      {perm.label}
+                    </label>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="flex justify-center pt-4">
             <Button onClick={handleCreate} disabled={isPending} className="bg-teal-500 hover:bg-teal-600">

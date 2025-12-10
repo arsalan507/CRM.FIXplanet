@@ -15,6 +15,9 @@ import {
   TrendingUp,
   FileText,
   X,
+  Clock,
+  ShoppingCart,
+  XCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -27,6 +30,9 @@ interface MobileSidebarProps {
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard, showBadge: false },
   { name: "Leads", href: "/leads", icon: Phone, showBadge: true },
+  { name: "Follow Up", href: "/followup", icon: Clock, showBadge: false },
+  { name: "Orders", href: "/orders", icon: ShoppingCart, showBadge: false },
+  { name: "Not Interested", href: "/not-interested", icon: XCircle, showBadge: false },
   { name: "Customers", href: "/customers", icon: Users, showBadge: false },
   { name: "Invoices", href: "/invoices", icon: FileText, showBadge: false },
   { name: "Team", href: "/team", icon: UsersRound, showBadge: false },
@@ -39,10 +45,13 @@ export function MobileSidebar({ staff, open, onClose }: MobileSidebarProps) {
   const { newLeadsCount } = useNotifications();
 
   const filteredNav = navigation.filter((item) => {
-    if (staff.role === "sell_executive") {
-      return ["Dashboard", "Leads"].includes(item.name);
+    if (staff.role === "sales_executive") {
+      return ["Dashboard", "Leads", "Follow Up", "Orders", "Not Interested"].includes(item.name);
     }
     if (staff.role === "technician") {
+      return ["Dashboard", "Leads", "Customers", "Invoices"].includes(item.name);
+    }
+    if (staff.role === "field_executive") {
       return ["Dashboard", "Leads", "Customers", "Invoices"].includes(item.name);
     }
     return true;

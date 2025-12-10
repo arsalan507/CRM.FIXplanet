@@ -64,6 +64,7 @@ export default function LeadDetailClient({
     device_type: lead.device_type,
     device_model: lead.device_model,
     issue_reported: lead.issue_reported,
+    quoted_amount: lead.quoted_amount || null,
   });
 
   const handleSaveLead = async () => {
@@ -209,6 +210,7 @@ export default function LeadDetailClient({
                       device_type: lead.device_type,
                       device_model: lead.device_model,
                       issue_reported: lead.issue_reported,
+                      quoted_amount: lead.quoted_amount || null,
                     });
                   }}
                 >
@@ -228,6 +230,22 @@ export default function LeadDetailClient({
           <CardContent className="space-y-4">
             {isEditing ? (
               <>
+                <div className="space-y-2">
+                  <Label htmlFor="quoted_amount">Quoted Price (₹)</Label>
+                  <Input
+                    id="quoted_amount"
+                    type="number"
+                    placeholder="Enter quoted price"
+                    value={editedLead.quoted_amount || ""}
+                    onChange={(e) =>
+                      setEditedLead({
+                        ...editedLead,
+                        quoted_amount: e.target.value ? parseFloat(e.target.value) : null,
+                      })
+                    }
+                  />
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="customer_name">Customer Name</Label>
                   <Input
@@ -358,6 +376,13 @@ export default function LeadDetailClient({
               </>
             ) : (
               <>
+                <div className="flex items-center gap-2">
+                  <span className="font-medium">Quoted Price:</span>
+                  <span className={lead.quoted_amount ? "text-lg font-semibold text-green-600" : "text-muted-foreground"}>
+                    {lead.quoted_amount ? `₹${lead.quoted_amount.toLocaleString('en-IN')}` : "-"}
+                  </span>
+                </div>
+
                 <div className="flex items-center gap-2">
                   <Phone className="h-4 w-4 text-muted-foreground" />
                   <span className="font-medium">Contact:</span>

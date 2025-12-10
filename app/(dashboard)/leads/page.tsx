@@ -18,7 +18,7 @@ export default async function LeadsPage() {
     .eq("auth_user_id", user?.id)
     .single();
 
-  const currentUserRole = (currentStaff?.role as UserRole) || "sell_executive";
+  const currentUserRole = (currentStaff?.role as UserRole) || "sales_executive";
   const currentStaffId = currentStaff?.id;
 
   // Build query based on role - filter by workflow_status = 'new' or null
@@ -34,6 +34,14 @@ export default async function LeadsPage() {
       ),
       invoice:invoices!invoice_id (
         *
+      ),
+      remarks:lead_remarks (
+        id,
+        remark,
+        created_at,
+        staff:staff_id (
+          full_name
+        )
       )
     `
     )
@@ -41,7 +49,7 @@ export default async function LeadsPage() {
     .order("created_at", { ascending: false });
 
   // Telecallers only see their assigned leads
-  if (currentUserRole === "sell_executive" && currentStaffId) {
+  if (currentUserRole === "sales_executive" && currentStaffId) {
     leadsQuery = leadsQuery.eq("assigned_to", currentStaffId);
   }
 
@@ -56,7 +64,7 @@ export default async function LeadsPage() {
     .from("staff")
     .select("id, full_name, role")
     .eq("is_active", true)
-    .in("role", ["sell_executive", "operation_manager", "super_admin"])
+    .in("role", ["sales_executive", "manager", "super_admin"])
     .order("full_name");
 
   return (
@@ -66,7 +74,7 @@ export default async function LeadsPage() {
       currentUserRole={currentUserRole}
       pageTitle="Enquiry"
       pageDescription={
-        currentUserRole === "sell_executive"
+        currentUserRole === "sales_executive"
           ? "Manage your assigned leads"
           : "Manage and track all incoming repair requests"
       }

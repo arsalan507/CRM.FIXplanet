@@ -44,10 +44,11 @@ export function NotificationProvider({
           table: "leads",
         },
         (payload) => {
-          // New lead inserted - check if status is "new"
-          if (payload.new && (payload.new as { status: string }).status === "new") {
-            // For sell executives and technicians, only count if assigned to them
-            if (staff.role === "sell_executive" || staff.role === "technician") {
+          // New lead inserted - check if workflow_status is "new" or null
+          const workflowStatus = (payload.new as { workflow_status: string | null })?.workflow_status;
+          if (payload.new && (workflowStatus === "new" || workflowStatus === null)) {
+            // For sales executives and technicians, only count if assigned to them
+            if (staff.role === "sales_executive" || staff.role === "technician") {
               if ((payload.new as { assigned_to: string | null }).assigned_to === staff.id) {
                 setNewLeadsCount((prev) => prev + 1);
               }
@@ -65,13 +66,16 @@ export function NotificationProvider({
           table: "leads",
         },
         (payload) => {
-          const oldStatus = (payload.old as { status: string })?.status;
-          const newStatus = (payload.new as { status: string })?.status;
+          const oldStatus = (payload.old as { workflow_status: string | null })?.workflow_status;
+          const newStatus = (payload.new as { workflow_status: string | null })?.workflow_status;
           const assignedTo = (payload.new as { assigned_to: string | null })?.assigned_to;
 
+          // Helper function to check if status is "new"
+          const isNewStatus = (status: string | null) => status === "new" || status === null;
+
           // Status changed from "new" to something else - decrement
-          if (oldStatus === "new" && newStatus !== "new") {
-            if (staff.role === "sell_executive" || staff.role === "technician") {
+          if (isNewStatus(oldStatus) && !isNewStatus(newStatus)) {
+            if (staff.role === "sales_executive" || staff.role === "technician") {
               if (assignedTo === staff.id) {
                 setNewLeadsCount((prev) => Math.max(0, prev - 1));
               }
@@ -81,8 +85,8 @@ export function NotificationProvider({
           }
 
           // Status changed to "new" from something else - increment
-          if (oldStatus !== "new" && newStatus === "new") {
-            if (staff.role === "sell_executive" || staff.role === "technician") {
+          if (!isNewStatus(oldStatus) && isNewStatus(newStatus)) {
+            if (staff.role === "sales_executive" || staff.role === "technician") {
               if (assignedTo === staff.id) {
                 setNewLeadsCount((prev) => prev + 1);
               }
@@ -91,18 +95,18 @@ export function NotificationProvider({
             }
           }
 
-          // Assignment changed for sell executives and technicians
-          if (staff.role === "sell_executive" || staff.role === "technician") {
+          // Assignment changed for sales executives and technicians
+          if (staff.role === "sales_executive" || staff.role === "technician") {
             const oldAssignedTo = (payload.old as { assigned_to: string | null })?.assigned_to;
             const newAssignedTo = assignedTo;
 
             // Lead assigned to this staff member
-            if (oldAssignedTo !== staff.id && newAssignedTo === staff.id && newStatus === "new") {
+            if (oldAssignedTo !== staff.id && newAssignedTo === staff.id && isNewStatus(newStatus)) {
               setNewLeadsCount((prev) => prev + 1);
             }
 
             // Lead unassigned from this staff member
-            if (oldAssignedTo === staff.id && newAssignedTo !== staff.id && oldStatus === "new") {
+            if (oldAssignedTo === staff.id && newAssignedTo !== staff.id && isNewStatus(oldStatus)) {
               setNewLeadsCount((prev) => Math.max(0, prev - 1));
             }
           }
@@ -116,9 +120,10 @@ export function NotificationProvider({
           table: "leads",
         },
         (payload) => {
-          // Lead deleted - if it was "new", decrement
-          if ((payload.old as { status: string })?.status === "new") {
-            if (staff.role === "sell_executive" || staff.role === "technician") {
+          // Lead deleted - if it was "new" or null, decrement
+          const oldStatus = (payload.old as { workflow_status: string | null })?.workflow_status;
+          if (oldStatus === "new" || oldStatus === null) {
+            if (staff.role === "sales_executive" || staff.role === "technician") {
               if ((payload.old as { assigned_to: string | null })?.assigned_to === staff.id) {
                 setNewLeadsCount((prev) => Math.max(0, prev - 1));
               }

@@ -42,16 +42,19 @@ export function Sidebar({ staff }: SidebarProps) {
 
   // Filter navigation based on role
   const filteredNav = navigation.filter((item) => {
-    if (staff.role === "sell_executive") {
+    if (staff.role === "sales_executive") {
       return ["Dashboard", "Enquiry", "Follow Up", "Order", "Not Interested"].includes(item.name);
     }
     if (staff.role === "technician") {
       return ["Dashboard", "Enquiry", "Follow Up", "Order", "Not Interested", "Customers", "Invoice"].includes(item.name);
     }
-    if (staff.role === "operation_manager") {
+    if (staff.role === "field_executive") {
+      return ["Dashboard", "Enquiry", "Follow Up", "Order", "Not Interested", "Customers", "Invoice"].includes(item.name);
+    }
+    if (staff.role === "manager") {
       return ["Dashboard", "Enquiry", "Follow Up", "Order", "Not Interested", "Customers", "Invoice", "Team", "Opportunities"].includes(item.name);
     }
-    return true; // super_admin and admin can see all
+    return true; // super_admin can see all
   });
 
   return (

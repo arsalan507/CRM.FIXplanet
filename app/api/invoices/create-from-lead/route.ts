@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
       taxRate,
       taxAmount,
       total,
-      terms,
+      paymentMethod,
     } = body;
 
     // Generate invoice number
@@ -47,6 +47,10 @@ export async function POST(request: NextRequest) {
 
     // Calculate parts_cost (sum of all line items)
     const parts_cost = lineItems.reduce((sum: number, item: any) => sum + item.amount, 0);
+
+    // When payment method is provided, mark as paid
+    const isPaid = !!paymentMethod;
+    const currentTimestamp = new Date().toISOString();
 
     // Create invoice using SimplifiedInvoice format
     const { data: invoice, error: invoiceError } = await supabase
@@ -67,14 +71,14 @@ export async function POST(request: NextRequest) {
         gst_included: taxRate > 0,
         gst_amount: taxAmount,
         total_amount: total,
-        payment_status: 'pending',
-        paid_at: null,
+        payment_status: isPaid ? 'paid' : 'pending',
+        payment_method: paymentMethod,
+        paid_at: isPaid ? currentTimestamp : null,
         pdf_url: null,
-        terms_conditions: terms,
-        invoice_date: new Date().toISOString(),
+        invoice_date: currentTimestamp,
         created_by: staffData?.id || null,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
+        created_at: currentTimestamp,
+        updated_at: currentTimestamp,
       })
       .select()
       .single();
@@ -87,10 +91,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Update lead with invoice_id
+    // Update lead with invoice_id and change status to "Invoiced"
     const { error: updateError } = await supabase
       .from("leads")
-      .update({ invoice_id: invoice.id })
+      .update({
+        invoice_id: invoice.id,
+        workflow_status: "Invoiced"
+      })
       .eq("id", leadId);
 
     if (updateError) {

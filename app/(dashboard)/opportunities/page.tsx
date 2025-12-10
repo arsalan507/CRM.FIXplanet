@@ -18,7 +18,7 @@ export default async function OpportunitiesPage() {
     .eq("auth_user_id", user?.id)
     .single();
 
-  const currentUserRole = (currentStaff?.role as UserRole) || "sell_executive";
+  const currentUserRole = (currentStaff?.role as UserRole) || "sales_executive";
   const currentStaffId = currentStaff?.id;
 
   // Get all leads with workflow_status (Order, Follow Up, Not Interested)
@@ -49,7 +49,7 @@ export default async function OpportunitiesPage() {
     .order("created_at", { ascending: false });
 
   // Telecallers only see their assigned leads
-  if (currentUserRole === "sell_executive" && currentStaffId) {
+  if (currentUserRole === "sales_executive" && currentStaffId) {
     leadsQuery = leadsQuery.eq("assigned_to", currentStaffId);
   }
 

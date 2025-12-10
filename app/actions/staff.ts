@@ -123,7 +123,7 @@ export async function createStaff(data: {
     const { data: authData, error: authError } = await supabase.auth.admin.createUser({
       email: data.email.trim().toLowerCase(),
       password: data.password,
-      email_confirm: false, // Will require OTP confirmation on login
+      email_confirm: true, // Email is pre-confirmed, user can login immediately
     });
 
     if (authError) {
@@ -215,16 +215,33 @@ export async function toggleStaffActive(id: string, isActive: boolean) {
 export async function deleteStaff(id: string) {
   const supabase = createAdminClient();
 
+  // Get the staff record to find the auth_user_id
+  const { data: staff } = await supabase
+    .from("staff")
+    .select("auth_user_id")
+    .eq("id", id)
+    .single();
+
   // First, unassign any leads assigned to this staff
   await supabase
     .from("leads")
     .update({ assigned_to: null })
     .eq("assigned_to", id);
 
+  // Delete from staff table (this will cascade delete due to ON DELETE CASCADE)
   const { error } = await supabase.from("staff").delete().eq("id", id);
 
   if (error) {
     return { success: false, error: error.message };
+  }
+
+  // Delete from auth.users if auth_user_id exists
+  if (staff?.auth_user_id) {
+    const { error: authError } = await supabase.auth.admin.deleteUser(staff.auth_user_id);
+    if (authError) {
+      console.error("Error deleting auth user:", authError);
+      // Don't fail the whole operation if auth deletion fails
+    }
   }
 
   revalidatePath("/staff");
@@ -256,11 +273,11 @@ export async function getTeamPerformance(period: "today" | "week" | "month" | "a
       startDate = null;
   }
 
-  // Get telecallers and managers
+  // Get sales executives and managers
   const { data: staff } = await supabase
     .from("staff")
     .select("id, full_name, role")
-    .in("role", ["sell_executive", "operation_manager"])
+    .in("role", ["sales_executive", "manager"])
     .eq("is_active", true);
 
   const leaderboard = await Promise.all(

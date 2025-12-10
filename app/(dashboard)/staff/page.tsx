@@ -19,7 +19,7 @@ export default async function StaffPage() {
     .eq("auth_user_id", user?.id)
     .single();
 
-  const currentUserRole = (currentStaff?.role as UserRole) || "sell_executive";
+  const currentUserRole = (currentStaff?.role as UserRole) || "sales_executive";
 
   if (!["super_admin", "admin"].includes(currentUserRole)) {
     redirect("/dashboard");
